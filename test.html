@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="test.stylesheet.css">
+    <title>Document</title>
+</head>
+
+<div class="top">
+    <p class="title">テキスト記入欄</p>
+    <input id="inputText-area" type="text" placeholder="ここに追加">
+    <button id="topButton" onclick="textPushButton()">追加</button>
+</div>
+<div id="center">
+    <p class="title">追加リスト欄</p>
+    <ul id="getList-area">
+
+    </ul>
+    <button id="checkAllButton" onclick="checkAllButton()">全部</button>
+    <button id="checkSignButton" onclick="checkSignButton()">選択</button>
+
+</div>
+<!-- <div id="bottom">
+    <p class="title">削除済リスト欄</p>
+    <ul id="cashList-area">
+        ここの処理は一旦保留します。途中までコードを書いてコメントアウトしてます。
+        もっと理解を深めてからリベンジします。諦めるようですみません！
+
+    </ul>
+    <button id="realcheckAllButton" onclick="realCheckAllButton()">全部</button>
+    <button id="realcheckSignButton" onclick="realCheckSignButton()">選択</button>
+</div> -->
+
+<body>
+
+    <script>
+        // 現在時刻を返す
+        const getDateTime = () => {
+            //文字列で再代入したため一旦letで定義します
+            let date = new Date(); //データ取得
+            let year = date.getFullYear(); //年
+            let month = date.getMonth() + 1; //月
+            let dayNum = date.getDate(); //日
+            let hour = date.getHours(); //時間
+            let minutes = date.getMinutes(); //分
+
+            if (month < 10) {
+                month = "0" + month
+            };
+            if (dayNum < 10) {
+                dayNum = "0" + dayNum
+            };
+            if (hour < 10) {
+                hour = "0" + hour
+            };
+            if (minutes < 10) {
+                minutes = "0" + minutes
+            };
+
+            return year + '/' + month + '/' + dayNum + ' ' + hour + ':' + minutes;
+        }
+
+        // let checkedList = [];
+
+        const textPushButton = () => {
+
+            //テキストの取得
+            const inputText = document.getElementById("inputText-area").value;
+            document.getElementById("inputText-area").value = "";
+
+            //リストの生成→取得したテキストの代入
+            const li = document.createElement("li");
+            li.id = "getList"
+            li.className = "geList"
+            const p = document.createElement("p");
+            p.className = "pBox"
+            p.innerHTML = inputText
+            const pTime = document.createElement("p")
+            const geTimeNow = getDateTime();
+            pTime.className = "pTime"
+            pTime.innerHTML = geTimeNow;
+            const delButton = document.createElement("button");
+            delButton.className = "dstBox";
+            delButton.id = "realAllDelButton";
+            delButton.innerText = "🗑";
+            const delCheck = document.createElement("input");
+            delCheck.className = "checkMark";
+            delCheck.id = "checkMark";
+            delCheck.type = "checkbox";
+            delCheck.name = "check"
+
+            //生成したリストをブラウザの表示
+            document.getElementById("getList-area").appendChild(li);
+            li.appendChild(p);
+            li.appendChild(pTime);
+            li.appendChild(delButton);
+            li.appendChild(delCheck);
+
+            /////////////////////////////////////////////////////////////////////////////////
+
+            //生成されたリスト内の【🗑】ボタンのクリックイベント（移動）
+            delButton.addEventListener("click", () => {
+                //ゴミ箱ボタンの親タグ【li】
+                const delTarget = delButton.parentNode;
+                document.getElementById("getList-area").removeChild(delTarget);
+
+                //ゴミ箱ボタンを押した時、追加リストから削除リストへテキストを移動するコード（以下参照）
+                // const addTarget = delButton.parentNode;
+                //liタグの最初の要素【p】のテキストを取得
+                // const text = addTarget.firstElementChild.innerText
+                //liタグの中身を削除
+                // addTarget.textContent = null;
+
+                // const p = document.createElement("p");
+                // p.className = "pBox"
+                // p.innerHTML = text
+                // const pTime = document.createElement("p")
+                // const geTimeNow = getDateTime();
+                // pTime.className = "pTime"
+                // pTime.innerHTML = geTimeNow;
+                // const realdelButton = document.createElement("button");
+                // realdelButton.className = "dstBox";
+                // realdelButton.id = "realAllDelButton";
+                // realdelButton.innerText = "🗑";
+                // const realdelCheck = document.createElement("input");
+                // realdelCheck.className = "checkMark";
+                // realdelCheck.id = "checkMark";
+                // realdelCheck.type = "checkbox";
+                // realdelCheck.name = "check"
+
+                // //ul(class="cashList-area")タグの中にliタグを表示
+                // document.getElementById("cashList-area").appendChild(addTarget);
+                // //liタグの中にそれぞれの要素を表示
+                // addTarget.appendChild(p);
+                // addTarget.appendChild(pTime);
+                // addTarget.appendChild(realdelButton);
+                // addTarget.appendChild(realdelCheck);
+
+                // //生成されたリスト内の【🗑】ボタンのクリックイベント（削除）
+                // realdelButton.addEventListener("click", () => {
+                //     const realdelTarget = realdelButton.parentNode;
+                //     document.getElementById("cashList-area").removeChild(realdelTarget);
+
+                // })
+            })
+        }
+
+        //追加リスト欄の全部ボタンのクリックイベント（追加リスト欄の一括コピー）
+        const checkAllButton = () => {
+
+            const checkAllButton = document.getElementById("checkAllButton");
+            //全部ボタンの直前の【ul】タグ（兄弟タグ）を取得
+            const allDelTarget = checkAllButton.previousElementSibling;
+            const allDelTargetFromText = document.getElementById("getList");
+            allDelTarget.remove();
+
+            //削除済リスト親タグ【div】を取得
+            const centerOfparent = document.getElementById("center");
+            //ulタグ以下を全削除したので、再度ulタグを生成
+            //（クリックで代入されるテキスト【li】タグ以下の格納場所を作る）
+            const newGetListArea = document.createElement("ul");
+            newGetListArea.id = "getList-area";
+            //生成した【li】タグを【ul】タグの中の全部ボタンの前に配置してブラウザ表示
+            centerOfparent.insertBefore(newGetListArea, checkAllButton);
+
+            //削除リストへの追加コード（以下参照）
+            // const cashListArea = document.getElementById("cashList-area");
+            // cashListArea.remove();
+
+            // const getListArea = document.getElementById("getList-area");
+            // const cloneAllText = getListArea.cloneNode(true);
+            // cloneAllText.id = "cashList-area"
+
+            // const checkAllButton = document.getElementById("checkAllButton");
+            //全部ボタンの直前の【ul】タグ（兄弟タグ）を取得
+            // const allDelTarget = checkAllButton.previousElementSibling;
+            // const allDelTargetFromText = document.getElementById("getList");
+            // allDelTarget.remove();
+
+            // const toBottom = document.getElementById("bottom");
+            // const realCheckAllButton = document.getElementById("realcheckAllButton");
+            // toBottom.appendChild(cloneAllText);
+
+            //削除済リスト親タグ【div】を取得
+            // const centerOfparent = document.getElementById("center");
+            //ulタグ以下を全削除したので、再度ulタグを生成
+            //（クリックで代入されるテキスト【li】タグ以下の格納場所を作る）
+            // const newGetListArea = document.createElement("ul");
+            // newGetListArea.id = "getList-area";
+            //生成した【li】タグを【ul】タグの中の全部ボタンの前に配置してブラウザ表示
+            // centerOfparent.insertBefore(newGetListArea, checkAllButton);
+
+            // //次の一括テキスト代入を可能にするため
+            // const bottomOfparent = document.getElementById("bottom");
+            // const newCashListArea = document.createElement("ul");
+            // newCashListArea.id = "cashList-area";
+            // bottomOfparent.appendChild(newCashListArea);
+
+            // const cashAreaDstBtn = document.getElementById("realAllDelButton")
+            // //生成されたリスト内の【🗑】ボタンのクリックイベント（削除）
+            // cashAreaDstBtn.addEventListener("click", () => {
+            // const realdelTarget = cashAreaDstBtn.parentNode;
+            // document.getElementById("cashList-area").removeChild(realdelTarget);
+            // realdelTarget.remove();
+            // })
+
+        }
+
+        //削除済リスト欄の全部ボタンのクリックイベント（削除）コード（以下参照）
+        // const realCheckAllButton = () => {
+        //     //テキストの全削除
+        //     const cashListArea = document.getElementById("cashList-area");
+        //     cashListArea.remove();
+
+        //     //削除済リスト親タグ【div】を取得
+        //     const bottomOfparent = document.getElementById("bottom");
+        //     //ulタグ以下を全削除したので、再度ulタグを生成
+        //     //（クリックで代入されるテキスト【li】タグ以下の格納場所を作る）
+        //     const newCashListArea = document.createElement("ul");
+        //     newCashListArea.id = "cashList-area";
+
+        //     bottomOfparent.appendChild(newCashListArea);
+
+        // }
+
+        //追加リスト欄のチェックボックスのイベント
+        const checkSignButton = () => {
+
+            const selectCheck = document.getElementsByName("check");
+
+            for (let i = 0; i < selectCheck.length; i++) {
+
+                if (selectCheck[i].checked) {
+                    const selectTarget = selectCheck[i].parentNode;
+                    document.getElementById("getList-area").removeChild(selectTarget);
+                    //チェックされたリストが削除リストに追加されるコード試験（以下参照）
+                    // const addSelectTarget = selectCheck[i].parentNode;
+                    // const cashListArea = document.getElementById("cashList-area");
+                    cashListArea.appendChild(addSelectTarget);
+                } else {
+                    console.log("削除されません")
+                }
+
+
+            }
+
+        }
+    </script>
+
+</body>
+
+</html>
