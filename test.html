@@ -62,7 +62,7 @@
             return year + '/' + month + '/' + dayNum + ' ' + hour + ':' + minutes;
         }
 
-        // let checkedList = [];
+        let checkedList = [];
 
         const textPushButton = () => {
 
@@ -233,20 +233,30 @@
             for (let i = 0; i < selectCheck.length; i++) {
 
                 if (selectCheck[i].checked) {
-                    const selectTarget = selectCheck[i].parentNode;
-                    document.getElementById("getList-area").removeChild(selectTarget);
-                    //チェックされたリストが削除リストに追加されるコード試験（以下参照）
-                    // const addSelectTarget = selectCheck[i].parentNode;
-                    // const cashListArea = document.getElementById("cashList-area");
-                    cashListArea.appendChild(addSelectTarget);
+
+                    const selectTarget = selectCheck[i].parentNode.textContent;
+                    checkedList.push(selectTarget);
+                    console.log(checkedList);
+
+                    checkedList = checkedList.filter((selectCheck) => {
+                        return (!selectTarget.checked == "")
+                    })
+
+                    // document.getElementById("getList-area").removeChild(selectTarget);
+                    //ここに追加①
                 } else {
                     console.log("削除されません")
                 }
 
-
             }
 
         }
+
+        //ここに追加①↑
+        //チェックされたリストが削除リストに追加されるコード試験（以下参照）
+        // const addSelectTarget = selectCheck[i].parentNode;
+        // const cashListArea = document.getElementById("cashList-area");
+        // cashListArea.appendChild(addSelectTarget);
     </script>
 
 </body>
