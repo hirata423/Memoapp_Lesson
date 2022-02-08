@@ -147,7 +147,7 @@
             })
         }
 
-        //追加リスト欄の全部ボタンのクリックイベント（追加リスト欄の一括コピー）
+        //追加リスト欄の全部ボタンのクリックイベント（一括削除）
         const checkAllButton = () => {
 
             const checkAllButton = document.getElementById("checkAllButton");
@@ -229,29 +229,26 @@
 
         const checkSignButton = () => { //trueを返すものだけ削除したい
 
-            const selectCheck = document.getElementsByName("check");
+            //チェクと付いたnameタグ要素を取得
+            const check = document.getElementsByName("check");
 
-            for (let i = 0; i < selectCheck.length; i++) {
+            for (let i = check.length - 1; i >= 0; i--) {
+                console.log(check[i].checked);
 
-                if (selectCheck[i].checked) {
+                if (check[i].checked) {
 
-                    const selectTarget = selectCheck[i].parentNode.textContent;
-                    checkedList.push(selectTarget);
-                    console.log(checkedList);
+                    const selectTarget = check[i].parentNode;
+                    selectTarget.remove();
 
-                    checkedList = checkedList.filter((selectCheck) => {
-                        return (!selectTarget.checked == "")
-                    })
-
-                    // document.getElementById("getList-area").removeChild(selectTarget);
                     //ここに追加①
                 } else {
-                    console.log("削除されません")
-                }
 
+                }
             }
 
         }
+
+
 
         //ここに追加①↑
         //チェックされたリストが削除リストに追加されるコード試験（以下参照）
